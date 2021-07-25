@@ -1,15 +1,27 @@
 package fadavidos.async
 
-import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.{Assertion, Assertions}
+import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
 
-class FutureTest extends AnyFlatSpec {
+class FutureTest extends AsyncFlatSpec {
 
-  "Future" should "be created succesful" in {
-    val greeting = Future.successful("hi")
-    greeting.map( hi => assert(hi.equals("hi")))
+  behavior of "Future"
+
+  it should "be created succesful" in {
+    val expectedGreeting = "hi"
+    val validation: String => Assertion = value => assert(expectedGreeting ==value)
+    Future.successful("hi").map(validation)
+  }
+
+  it should "be created failed" in {
+    Future.failed[String](new RuntimeException("something was wrong!!"))
+      .map[Assertion] { _ => fail() }
+      .recover {
+        case _: RuntimeException => succeed
+        case _: Exception => fail()
+      }
   }
 
 }
