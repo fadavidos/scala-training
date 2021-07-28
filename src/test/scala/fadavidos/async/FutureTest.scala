@@ -7,9 +7,9 @@ import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
 import scala.util.Random
 
-class FutureTest extends AnyFlatSpec {
+class FutureTest extends AsyncFlatSpec {
 
-  implicit val executionContext = scala.concurrent.ExecutionContext.Implicits.global
+  override implicit val executionContext = scala.concurrent.ExecutionContext.Implicits.global
 
   behavior of "Future"
 
@@ -20,7 +20,7 @@ class FutureTest extends AnyFlatSpec {
       fruits += fruit
     }
     Future(addFruit("apple"))
-    Thread.sleep(5000)
+    Thread.sleep(2000)
     assert(fruits.contains("apple"))
   }
 
