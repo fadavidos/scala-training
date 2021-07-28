@@ -20,6 +20,17 @@ class ListTest extends AnyFlatSpec {
     assert(fruits.size == 10)
   }
 
+  it should "group by elements and it should count same elements, in a Map" in {
+    implicit class FruitsMap[A, B](map: Map[A, List[B]]) {
+      def elementsEqualsTo(key: A, number: Int) = map.get(key).exists(_.size == number)
+    }
+    val fruits = List(TANGERINE, APPLE, PEAR, PEAR, TANGERINE, TANGERINE)
+    val groupedList: Map[String, List[String]] = fruits.groupBy(identity)
+    assert(groupedList.elementsEqualsTo(TANGERINE, 3))
+    assert(groupedList.elementsEqualsTo(APPLE, 1))
+    assert(groupedList.elementsEqualsTo(PEAR, 2))
+  }
+
   "filter()" should "delete others elements" in {
     val fruits: List[String] = List(APPLE, PEAR, TANGERINE)
     val appleFilter: String => Boolean = (value) => value.equals(APPLE)
