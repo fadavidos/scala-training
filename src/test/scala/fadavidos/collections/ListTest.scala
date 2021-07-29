@@ -22,13 +22,13 @@ class ListTest extends AnyFlatSpec {
 
   it should "group by elements and it should count same elements, in a Map" in {
     implicit class FruitsMap[A, B](map: Map[A, List[B]]) {
-      def elementsEqualsTo(key: A, number: Int) = map.get(key).exists(_.size == number)
+      def mountValuesEqualsTo(key: A, number: Int) = map.get(key).exists(_.size == number)
     }
     val fruits = List(TANGERINE, APPLE, PEAR, PEAR, TANGERINE, TANGERINE)
     val groupedList: Map[String, List[String]] = fruits.groupBy(identity)
-    assert(groupedList.elementsEqualsTo(TANGERINE, 3))
-    assert(groupedList.elementsEqualsTo(APPLE, 1))
-    assert(groupedList.elementsEqualsTo(PEAR, 2))
+    assert(groupedList.mountValuesEqualsTo(TANGERINE, 3))
+    assert(groupedList.mountValuesEqualsTo(APPLE, 1))
+    assert(groupedList.mountValuesEqualsTo(PEAR, 2))
   }
 
   "filter()" should "delete others elements" in {
@@ -46,6 +46,13 @@ class ListTest extends AnyFlatSpec {
     val fruits: List[String] = List(APPLE, TANGERINE, PEAR)
     val ZAOrdered: (String, String) => Boolean = (a, b) => a.charAt(0).toLower > b.charAt(0).toLower
     assert(fruits.sortWith(ZAOrdered).startsWith(List(TANGERINE)))
+  }
+
+  it should "order people by age" in {
+    case class Person(name: String, age: Int)
+    val people: List[Person] = List(Person("Luke", 15), Person("Mark", 10), Person("Peter", 25))
+    val ZAOrdered: (Person, Person) => Boolean = (a, b) => a.age < b.age
+    assert(people.sortWith(ZAOrdered).startsWith(List(Person("Mark", 10))))
   }
 
 
