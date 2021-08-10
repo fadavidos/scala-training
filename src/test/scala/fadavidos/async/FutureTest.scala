@@ -1,7 +1,7 @@
 package fadavidos.async
 
 import org.scalatest.Assertion
-import org.scalatest.flatspec.{AnyFlatSpec, AsyncFlatSpec}
+import org.scalatest.flatspec.AsyncFlatSpec
 
 import scala.collection.mutable.ListBuffer
 import scala.concurrent.Future
