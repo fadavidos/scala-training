@@ -40,4 +40,25 @@ class FPTest extends AnyFlatSpec {
     assertResult("hello")(jsonString)
   }
 
+  "monoid" should "combine elements using fold" in {
+
+    // My own type class
+    trait MyMonoid[A]{
+      def combine(a1: A, a2: A): A
+      def empty:A
+    }
+
+    object StringMonoid extends MyMonoid[String] {
+      override def combine(a1: String, a2: String): String = s"$a1 $a2".trim
+
+      override def empty: String = ""
+    }
+
+    val list = List("one", "two", "three", "four")
+    val result = list.fold(StringMonoid.empty)(StringMonoid.combine)
+
+    assertResult("one two three four")(result)
+
+  }
+
 }
